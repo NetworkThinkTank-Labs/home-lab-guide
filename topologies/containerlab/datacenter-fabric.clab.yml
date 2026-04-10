@@ -1,0 +1,44 @@
+# Datacenter Fabric Topology - Containerlab
+# NetworkThinkTank-Labs / home-lab-guide
+# Spine-Leaf architecture with 2 spines and 4 leaves
+
+name: datacenter-fabric
+
+topology:
+  nodes:
+      spine1:
+            kind: ceos
+                  image: ceos:4.28.0F
+                        startup-config: ""
+                            spine2:
+                                  kind: ceos
+                                        image: ceos:4.28.0F
+                                              startup-config: ""
+                                                  leaf1:
+                                                        kind: ceos
+                                                              image: ceos:4.28.0F
+                                                                    startup-config: ""
+                                                                        leaf2:
+                                                                              kind: ceos
+                                                                                    image: ceos:4.28.0F
+                                                                                          startup-config: ""
+                                                                                              leaf3:
+                                                                                                    kind: ceos
+                                                                                                          image: ceos:4.28.0F
+                                                                                                                startup-config: ""
+                                                                                                                    leaf4:
+                                                                                                                          kind: ceos
+                                                                                                                                image: ceos:4.28.0F
+                                                                                                                                      startup-config: ""
+                                                                                                                                      
+                                                                                                                                        links:
+                                                                                                                                            # Spine1 to all Leaves
+                                                                                                                                                - endpoints: ["spine1:eth1", "leaf1:eth1"]
+                                                                                                                                                    - endpoints: ["spine1:eth2", "leaf2:eth1"]
+                                                                                                                                                        - endpoints: ["spine1:eth3", "leaf3:eth1"]
+                                                                                                                                                            - endpoints: ["spine1:eth4", "leaf4:eth1"]
+                                                                                                                                                                # Spine2 to all Leaves
+                                                                                                                                                                    - endpoints: ["spine2:eth1", "leaf1:eth2"]
+                                                                                                                                                                        - endpoints: ["spine2:eth2", "leaf2:eth2"]
+                                                                                                                                                                            - endpoints: ["spine2:eth3", "leaf3:eth2"]
+                                                                                                                                                                                - endpoints: ["spine2:eth4", "leaf4:eth2"]
