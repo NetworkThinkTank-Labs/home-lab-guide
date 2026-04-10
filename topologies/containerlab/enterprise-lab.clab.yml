@@ -1,0 +1,34 @@
+# Enterprise Lab Topology - Containerlab
+# NetworkThinkTank-Labs / home-lab-guide
+# Simple enterprise network with core, distribution, and access layers
+
+name: enterprise-lab
+
+topology:
+  nodes:
+      core-rtr:
+            kind: ceos
+                  image: ceos:4.28.0F
+                      dist-sw1:
+                            kind: ceos
+                                  image: ceos:4.28.0F
+                                      dist-sw2:
+                                            kind: ceos
+                                                  image: ceos:4.28.0F
+                                                      access-sw1:
+                                                            kind: ceos
+                                                                  image: ceos:4.28.0F
+                                                                      access-sw2:
+                                                                            kind: ceos
+                                                                                  image: ceos:4.28.0F
+                                                                                      firewall:
+                                                                                            kind: linux
+                                                                                                  image: alpine:latest
+
+                                                                                                    links:
+                                                                                                        - endpoints: ["core-rtr:eth1", "dist-sw1:eth1"]
+                                                                                                            - endpoints: ["core-rtr:eth2", "dist-sw2:eth1"]
+                                                                                                                - endpoints: ["core-rtr:eth3", "firewall:eth1"]
+                                                                                                                    - endpoints: ["dist-sw1:eth2", "dist-sw2:eth2"]
+                                                                                                                        - endpoints: ["dist-sw1:eth3", "access-sw1:eth1"]
+                                                                                                                            - endpoints: ["dist-sw2:eth3", "access-sw2:eth1"]
