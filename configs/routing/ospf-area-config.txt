@@ -1,0 +1,56 @@
+! =====================================================
+! OSPF Multi-Area Configuration Example
+! Home Lab - Enterprise Topology
+! NetworkThinkTank-Labs
+! =====================================================
+
+! --- Core Router 1 (Area 0 - Backbone) ---
+hostname Core-SW1
+!
+router ospf 1
+ router-id 10.0.0.1
+ network 10.0.0.0 0.0.0.255 area 0
+ network 10.1.0.0 0.0.0.255 area 0
+ passive-interface Loopback0
+!
+interface Loopback0
+ ip address 10.0.0.1 255.255.255.255
+!
+interface GigabitEthernet0/0
+ description Link to Core-SW2
+ ip address 10.1.0.1 255.255.255.252
+ ip ospf network point-to-point
+ ip ospf cost 10
+ no shutdown
+!
+interface GigabitEthernet0/1
+ description Link to Edge Router
+ ip address 10.0.0.1 255.255.255.252
+ ip ospf cost 10
+ no shutdown
+
+! --- Core Router 2 (Area 0 - Backbone) ---
+hostname Core-SW2
+!
+router ospf 1
+ router-id 10.0.0.2
+ network 10.0.0.0 0.0.0.255 area 0
+ network 10.1.0.0 0.0.0.255 area 0
+ network 10.2.0.0 0.0.0.255 area 1
+ passive-interface Loopback0
+!
+interface Loopback0
+ ip address 10.0.0.2 255.255.255.255
+!
+interface GigabitEthernet0/0
+ description Link to Core-SW1
+ ip address 10.1.0.2 255.255.255.252
+ ip ospf network point-to-point
+ ip ospf cost 10
+ no shutdown
+!
+interface GigabitEthernet0/1
+ description Link to Access Layer (Area 1)
+ ip address 10.2.0.1 255.255.255.252
+ ip ospf cost 20
+ no shutdown
